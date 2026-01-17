@@ -1,134 +1,149 @@
 # Moral Dilemma Chatbot (Replit Version)
 
-A lightweight web-based chatbot designed to help users reflect on moral dilemmas.  
-It uses **OpenAI’s GPT-4o-mini** for conversational reasoning and logs all interactions to a **CSV file** inside Replit for later analysis.
+> **Note:** This version is specifically adapted to run on **Replit**, removing all AWS, Cloudflare tunnel, and database dependencies in favor of a simple, reproducible setup.
+
+This repository contains a lightweight, fully self‑contained web chatbot designed to support moral reflection in research, classroom, and workshop settings. It uses OpenAI’s `gpt-4o-mini` model for conversational reasoning and logs all interactions locally to a CSV file for later analysis.
+
+## 🎯 What This Project Is For
+
+The design prioritizes clarity, transparency, and ease of replication over scalability. It is well suited for:
+
+* **Research Studies:** Conducting studies on moral reasoning or moral alignment.
+* **Intervention Experiments:** AI‑mediated reflection tasks.
+* **Qualtrics Integration:** Embedding an interactive chatbot inside Qualtrics surveys.
+* **Education:** Live classroom demonstrations or workshops.
+* **Prototyping:** Rapid prototyping without complex cloud infrastructure.
 
 ---
 
-## Overview
+## 📂 Project Structure
 
-This chatbot is ideal for:
+```text
+.
+├── chatbot.py        # Flask backend + OpenAI calls
+├── chat.html         # Frontend chat interface
+├── chatlog.csv       # Auto‑generated conversation log
+├── requirements.txt  # Python dependencies
+├── .replit           # Replit run configuration
+├── pyproject.toml    # (Optional) Poetry/UV config
+└── uv.lock           # (Optional) Lock file
 
-- Research studies involving moral reflection or AI-mediated interventions  
-- Embedding within **Qualtrics surveys**  
-- Classroom or workshop demonstrations of human–AI dialogue  
-- Lightweight deployments without databases or cloud infrastructure  
+***
 
----
+### Section 2: Tech Stack and Setup Options
 
-## Tech Stack
+```markdown
+## 🛠 Tech Stack
 
 | Component | Technology |
-|------------|-------------|
+| :--- | :--- |
 | **Frontend** | HTML, CSS, JavaScript (`chat.html`) |
-| **Backend** | Python (Flask) |
-| **Model** | OpenAI GPT-4o-mini |
-| **Storage** | Local CSV logging (within Replit) |
-| **Deployment** | Replit (free tier) |
+| **Backend** | Python + Flask (`chatbot.py`) |
+| **Model** | OpenAI `gpt-4o-mini` |
+| **Storage** | Local CSV logging (inside Replit) |
+| **Hosting** | Replit (Free tier supported) |
 
 ---
 
-## How to Run the Chatbot on Replit
+## 🚀 Running the Project on Replit
 
-This version is designed for simple, reproducible use inside **Replit**, which hosts both the backend (Flask) and frontend (HTML).  
-No AWS, Cloudflare, or manual tunnels are required.
+This project is designed to work out of the box on Replit.
 
----
+### Option 1: Remix the Existing Repl (Recommended)
+Use the working replication directly. Click "Remix" to create your own editable copy:
+👉 **[Click here to Remix](https://replit.com/@kocse/moral-alignment-workshop?v=1)**
 
-### 1. Open or Remix the Repl
+### Option 2: Manual Setup
+1. Create a free account at [Replit.com](https://replit.com).
+2. Click **Create Repl** → Choose **Python**.
+3. Upload the following files from this repository into the repl:
+    * `chatbot.py`
+    * `chat.html`
+    * `requirements.txt`
+    * `.replit`
 
-You can **remix** (Replit’s term for “fork”) the working version using this link:
+## Section 3: Environmental Variables
+## 🔑 Environment Variables (Required)
 
-👉 [https://replit.com/@kocse/moral-alignment-workshop?v=1](https://replit.com/@kocse/moral-alignment-workshop?v=1)
+Replit does not use `.env` files. Secrets must be added through the Replit interface.
 
-Alternatively, you can import the project manually:
+1. Go to the Replit sidebar (left side of the workspace).
+2. Click **Tools** (if needed) and select **Secrets** (Lock icon).
+3. Add the following secrets:
 
-1. Go to [**replit.com**](https://replit.com) and create a free account.  
-2. Click **Create Repl → Python**.  
-3. Upload these files:  
-   - `chatbot.py`  
-   - `chat.html`  
-   - `requirements.txt`  
+| Key | Value |
+| :--- | :--- |
+| `OPENAI_API_KEY` | **(Required)** Paste your OpenAI API key here. |
+| `OPENAI_MODEL` | **(Optional)** `gpt-4o-mini` (Defaults to this if omitted). |
 
----
+> **Security Note:** These values are injected securely at runtime and are never exposed in the code or committed to GitHub.
 
-### 2. Configure Secrets (Environment Variables)
+## Section 4: Embedding in Qualtrics
+## 🧩 Embedding in Qualtrics
 
-In the Replit left sidebar, open **Tools → Secrets (🔒 icon)** and add:
+The chatbot can be embedded directly inside a Qualtrics survey using an `iframe`. It accepts dynamic URL parameters to link survey data to chat logs.
 
-| Name | Value |
-|------|--------|
-| `OPENAI_API_KEY` | your OpenAI API key |
-| *(optional)* `OPENAI_MODEL` | `gpt-4o-mini` |
+### 1. URL Parameters
+The chatbot reads the following parameters from the URL:
+* `participant_id`: Participant identifier.
+* `response_id`: Qualtrics response ID.
+* `dilemma`: The specific moral dilemma text or ID.
 
-This keeps your key private and out of the code.
-
----
-
-### 3. Check Your Run Configuration
-
-Make sure Replit knows which file to run:
-
-1. If a file named `.replit` exists, ensure it contains:
-
-   ```toml
-   run = "python3 chatbot.py"
-2. Click Run (green button).
-   Wait for the console to show: Running on http://0.0.0.0:80
-3. Replit will open a Preview tab with a live URL like: https://your-project-name.username.repl.co/
-   That’s your public chatbot URL.
-
-### 4. Test It
-
-1. Click **Run** (green button).  
-2. Wait for the console to show: Running on http://0.0.0.0:80
-3. Replit will open a **Preview** tab with a live URL like: https://your-project-name.username.repl.co/
-   That’s your public chatbot URL.
-
----
-
-### 5. Linking to Qualtrics
-
-Embed the chatbot directly inside a Qualtrics survey (Descriptive Text → HTML view):
+### 2. Integration Steps
+1. In Qualtrics, create a **Descriptive Text** question.
+2. Click the text box → **Rich Content Editor**.
+3. Switch to **HTML View** (`<>` icon or "Source").
+4. Paste the following code:
 
 ```html
 <iframe
-src="https://your-project-name.username.repl.co/?participant_id=${e://Field/participant_id}&response_id=${e://Field/ResponseID}&dilemma=${q://QID116/ChoiceGroup/SelectedChoices}"
-width="100%"
-height="700"
-style="border:1px solid #ccc;border-radius:8px;">
+  src="[https://your-project-name.username.repl.co/?participant_id=$](https://your-project-name.username.repl.co/?participant_id=$){e://Field/participant_id}&response_id=${e://Field/ResponseID}&dilemma=${q://QID116/ChoiceGroup/SelectedChoices}"
+  width="100%"
+  height="700"
+  style="border:1px solid #ccc; border-radius:8px;">
 </iframe>
-```
-## 6. Viewing and Downloading Logs
+5. Configuration
+* Replace URL: Change your-project-name.username.repl.co with your actual Replit webview URL.
 
-Each user message and AI reply is saved to **`chatlog.csv`** with the following columns:
+*Replace QID: Change QID116 to the specific Qualtrics Question ID that holds the dilemma text.
 
-| timestamp | model | participant_id | response_id | dilemma | user_input | bot_reply |
-|------------|--------|----------------|--------------|----------|-------------|------------|
+***
 
-You can download this file directly from Replit for analysis in **R**, **Excel**, or **Python**.
+### Section 5: Logs, Troubleshooting, and Attribution
 
----
+```markdown
+## 📊 Viewing and Downloading Logs
 
-## 7. Keeping the App Active During a Workshop
+No database setup is required. All conversations are automatically appended to `chatlog.csv` inside the file tree.
 
-Replit free-tier projects sleep after inactivity. To keep it live during a session:
+**Columns Logged:**
+`timestamp` | `model` | `participant_id` | `response_id` | `dilemma` | `user_input` | `bot_reply`
 
-- Keep the Replit browser tab open, or  
-- Enable **Always On** (available in paid plans)
-
-Participants can **remix** the Repl, add their own OpenAI keys, and immediately use the **Preview** tab.
-
----
-
-## Author
-
-Developed for the **FutureUS / Moral Alignment Workshop**  
-by Sema Koc, Mortality Lab, Boston College
+**To Access Data:**
+* Open the file directly inside the Replit editor.
+* Download the file for analysis in R, Python, Excel, or Stata.
 
 ---
 
-## License
+## ⚠️ Troubleshooting
 
-This project is for research and educational use.  
-You may remix and adapt it for academic workshops or studies with appropriate citation.
+If clicking **Run** does nothing or the app fails to start, check the following:
+
+### 1. Run button does nothing / Exits immediately
+Check your `.replit` file. It must contain this exact line:
+```toml
+run = "python3 chatbot.py"
+
+## 📝 Author and Attribution
+
+**Developed for the FutureUS / Moral Alignment Workshop**
+
+* **Sema Koc**
+* Mortality Lab
+* Boston College
+
+---
+
+### License
+This project is intended for **research and educational use**.
+You may remix, adapt, and extend it for academic workshops or studies with appropriate attribution.
