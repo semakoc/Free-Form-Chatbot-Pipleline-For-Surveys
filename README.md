@@ -205,14 +205,15 @@ This project was developed as part of work associated with the Morality Lab and 
 
 **Affiliation:**
 
-Morality Lab, Boston College
+* Morality Lab, Boston College
 
 **Attribution guidance:**
 
-This repository may be remixed or adapted for research, educational, or workshop use. Please cite the SPSP 2026 presentation and acknowledge the Morality Lab when using or extending this codebase.
+* This repository may be remixed or adapted for research, educational, or workshop use. Please cite the SPSP 2026 presentation and acknowledge the Morality Lab when using or extending this codebase.
 
-**APA Citation**:
-Zheng, H. H., Haman, S., & Koc, S. (2026, February 27). Building Free-Form Data Pipelines for Human-AI Conversations in Surveys. SPSP 2026 Annual Convention.
+**Presentation APA Citation**:
+
+* Zheng, H. H., Haman, S., & Koc, S. (2026, February 27). Building Free-Form Data Pipelines for Human-AI Conversations in Surveys. SPSP 2026 Annual Convention.
 
 ### License
 This project is intended for research and educational use.
