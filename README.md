@@ -179,7 +179,7 @@ Important: The iframe points to the Replit app URL, not to filenames like `front
 No database setup is required. All conversations are automatically appended to `chatlog.csv` inside the file tree.
 
 **Columns Logged:**
-`timestamp` | `model` | `participant_id` | `response_id` | `dilemma` | `user_input` | `bot_reply`
+`timestamp` | `model` | `participant_id` | `response_id` | `dilemma` | `system_prompt`| |`user_input` | `bot_reply`
 
 **To Access Data:**
 * Open the file directly inside the Replit editor.
