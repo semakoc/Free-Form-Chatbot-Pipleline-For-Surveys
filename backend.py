@@ -1,4 +1,4 @@
-# === MORAL DILEMMA CHATBOT (REPLIT VERSION) ===
+# === Free-Form Data Pipeline for Human-AI Conversations in Surveys (REPLIT VERSION) ===
 # This version has been modified from the AWS deployment
 # (which used EC2, S3, and Cloudflare Tunnels)
 # to run entirely inside Replit using local CSV logging.
@@ -7,6 +7,17 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from openai import OpenAI
 import datetime, os, time, csv, json
+
+# --- GLOBAL PROMPT & INPUT DEFINITIONS ---
+
+# --- Customize your own system prompt and initial user input template --- 
+
+SYSTEM_PROMPT_TEMPLATE = (
+    "You are a nonjudgmental assistant helping the user reflect. "
+    "Keep replies short (3–5 sentences)."
+)
+
+INITIAL_USER_INPUT_TEMPLATE = "Help me decide what I should do. {stimuli}" 
 
 # --- Flask setup (unchanged structure) ---
 app = Flask(__name__)
@@ -46,31 +57,35 @@ def chat():
     user_input = (data.get("message") or "").strip()
     response_id = data.get("response_id", "none")
     participant_id = data.get("participant_id", "anonymous")
-    dilemma = data.get("dilemma", "unknown")
+    stimuli = data.get("stimuli", "unknown")
 
-    print(f"{response_id}: {user_input} (Dilemma: {dilemma})")
+    print(f"{response_id}: {user_input} (Stimuli: {stimuli})")
 
     session_key = (participant_id, response_id)
     now = time.time()
 
-    # CHANGED: removed S3/session handling logic from AWS
+    # --- Session initialization ---
     # Replit keeps everything in memory during runtime
     if (session_key not in all_sessions
             or now - all_sessions[session_key]["last_active"]
             > SESSION_TIMEOUT_SECONDS):
-        system_prompt = (
-            "You are a nonjudgmental assistant helping the user reflect on this moral dilemma. "
-            "Keep replies short (3–5 sentences), and end with a gentle reflective question."
-        )
-        messages = [{"role": "system", "content": system_prompt}]
-        all_sessions[session_key] = {"messages": messages, "last_active": now, "system_prompt": system_prompt}
+       
+        messages = [{
+            "role": "system", 
+            "content": SYSTEM_PROMPT_TEMPLATE
+        }]
+        all_sessions[session_key] = {
+            "messages": messages, 
+            "last_active": now, 
+            "system_prompt": SYSTEM_PROMPT_TEMPLATE
+        }
 
     messages = all_sessions[session_key]["messages"]
     system_prompt = all_sessions[session_key].get("system_prompt", messages[0]["content"] if messages and messages[0].get("role") == "system" else "")
 
     # CHANGED: simple reset command for starting conversation
     if user_input.upper() == "START_CONVERSATION":
-        user_input = f"Help me decide what I should do. {dilemma}"
+        user_input = INITIAL_USER_INPUT_TEMPLATE.format(stimuli=stimuli)
 
     # GPT response logic (unchanged)
     messages.append({"role": "user", "content": user_input})
@@ -95,7 +110,7 @@ def chat():
         "model": MODEL_NAME,
         "participant_id": participant_id,
         "response_id": response_id,
-        "dilemma": dilemma,
+        "stimuli": stimuli,
         "system_prompt": system_prompt,
         "user_input": user_input,
         "bot_reply": bot_reply,
@@ -112,7 +127,7 @@ def chat():
                 "model",
                 "participant_id",
                 "response_id",
-                "dilemma",
+                "stimuli",
                 "system_prompt",
                 "user_input",
                 "bot_reply",
