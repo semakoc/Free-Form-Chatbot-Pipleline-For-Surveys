@@ -8,6 +8,17 @@ from flask_cors import CORS
 from openai import OpenAI
 import datetime, os, time, csv, json
 
+# --- GLOBAL PROMPT & INPUT DEFINITIONS ---
+
+# --- Customize your own system prompt and initial user input template --- 
+
+SYSTEM_PROMPT_TEMPLATE = (
+    "You are a nonjudgmental assistant helping the user reflect. "
+    "Keep replies short (3–5 sentences)."
+)
+
+INITIAL_USER_INPUT_TEMPLATE = "Help me decide what I should do. {stimuli}" 
+
 # --- Flask setup (unchanged structure) ---
 app = Flask(__name__)
 CORS(app)
@@ -53,7 +64,7 @@ def chat():
     session_key = (participant_id, response_id)
     now = time.time()
 
-    # CHANGED: removed S3/session handling logic from AWS
+    # --- Session initialization ---
     # Replit keeps everything in memory during runtime
     if (session_key not in all_sessions
             or now - all_sessions[session_key]["last_active"]
