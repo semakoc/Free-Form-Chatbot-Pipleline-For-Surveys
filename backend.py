@@ -57,7 +57,7 @@ def chat():
     user_input = (data.get("message") or "").strip()
     response_id = data.get("response_id", "none")
     participant_id = data.get("participant_id", "anonymous")
-    stimuli = data.get("stimuli", "unknown")
+    stimuli = data.get("stimuli", "default_stimuli")
 
     print(f"{response_id}: {user_input} (Stimuli: {stimuli})")
 
