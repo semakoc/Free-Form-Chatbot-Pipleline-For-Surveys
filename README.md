@@ -173,7 +173,7 @@ Important: The iframe points to the Replit app URL, not to filenames like `front
 
 ```html
 <iframe
-  src="https://your-repl-name.username.repl.co/?participant_id=${e://Field/participant_id}&response_id=${e://Field/ResponseID}&stimuli=${q://QID116/ChoiceGroup/SelectedChoices}"
+  src="[insert URL]?participant_id=${e://Field/participant_id}&response_id=${e://Field/ResponseID}&stimuli=${q://QID116/ChoiceGroup/SelectedChoices}"
   width="100%"
   height="700"
   style="border:1px solid #ccc; border-radius:8px;">
