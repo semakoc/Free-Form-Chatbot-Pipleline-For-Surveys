@@ -186,7 +186,7 @@ Important: The iframe points to the Replit app URL, not to filenames like `front
 
 ***
 
-## Section 4: Logs, Troubleshooting, and Attribution
+## Section 4: Logs, Troubleshooting
 
 ### 📊Viewing and Downloading Logs
 
@@ -196,14 +196,14 @@ No database setup is required. All conversations are automatically appended to `
 * Open the file directly inside the Replit editor.
 * Download the file for analysis in R, Python, Excel, or Stata.
 
----
-
 ### ⚠️Troubleshooting
 If clicking **Run** does nothing or the app fails to start, check the following:
 Check your `.replit` file. It must contain this exact line:
 ```toml
 run = "python3 backend.py"
 ```
+
+---
 ## 📝Author and Attribution
 
 This project was developed as part of work associated with the Morality Lab and the SPSP 2026 professional development session _Building Free-Form Data Pipelines for Human-AI_ Conversations in Surveys.
@@ -226,6 +226,7 @@ This project was developed as part of work associated with the Morality Lab and 
 
 * Zheng, H. H., Haman, S., & Koc, S. (2026, February 27). Building Free-Form Data Pipelines for Human-AI Conversations in Surveys. SPSP 2026 Annual Convention.
 
+---
 ## License
 This project is intended for research and educational use.
 You may remix, adapt, and extend it for academic workshops or studies with appropriate attribution.
