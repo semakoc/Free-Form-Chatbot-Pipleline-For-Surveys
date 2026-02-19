@@ -1,4 +1,4 @@
-# === MORAL STIMULI CHATBOT (REPLIT VERSION) ===
+# === Free-Form Data Pipeline for Human-AI Conversations in Surveys (REPLIT VERSION) ===
 # This version has been modified from the AWS deployment
 # (which used EC2, S3, and Cloudflare Tunnels)
 # to run entirely inside Replit using local CSV logging.
@@ -57,9 +57,9 @@ def chat():
     user_input = (data.get("message") or "").strip()
     response_id = data.get("response_id", "none")
     participant_id = data.get("participant_id", "anonymous")
-    stimuli = data.get("stimuli", "default_stimuli")
+    stimuli = data.get("stimuli", "default stimuli")
 
-    print(f"{response_id}: {user_input} (Stimuli: {stimuli})")
+    print(f"{response_id}: {user_input} (stimuli: {stimuli})")
 
     session_key = (participant_id, response_id)
     now = time.time()
@@ -89,7 +89,7 @@ def chat():
 
     # CHANGED: simple reset command for starting conversation
     if user_input.upper() == "START_CONVERSATION":
-        user_input = f"Help me decide what I should do. {stimuli}"
+        user_input = INITIAL_USER_INPUT_TEMPLATE.format(stimuli=stimuli)
 
     # GPT response logic (unchanged)
     messages.append({"role": "user", "content": user_input})
@@ -123,39 +123,25 @@ def chat():
     }
 
     csv_filename = "chatlog.csv"
-    fieldnames = [
-        "timestamp",
-        "model",
-        "participant_id",
-        "response_id",
-        "stimuli",
-        "system_prompt",
-        "user_input",
-        "bot_reply",
-    ]
-    header_line = ",".join(fieldnames)
     file_exists = os.path.isfile(csv_filename)
-    file_empty = not file_exists or (os.path.getsize(csv_filename) == 0)
-    needs_header = file_empty
-    if file_exists and not file_empty:
-        with open(csv_filename, "r", newline="", encoding="utf-8") as f:
-            first_line = (f.readline() or "").strip()
-        needs_header = not first_line.startswith("timestamp,")
 
-    if needs_header and file_exists and not file_empty:
-        with open(csv_filename, "r", newline="", encoding="utf-8") as f:
-            existing = f.read()
-        with open(csv_filename, "w", newline="", encoding="utf-8") as f:
-            f.write(header_line + "\n")
-            f.write(existing)
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writerow(record)
-    else:
-        with open(csv_filename, "a", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            if needs_header:
-                writer.writeheader()
-            writer.writerow(record)
+    with open(csv_filename, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=[
+                "timestamp",
+                "model",
+                "participant_id",
+                "response_id",
+                "stimuli",
+                "system_prompt",
+                "user_input",
+                "bot_reply",
+            ],
+        )
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(record)
 
     # CHANGED: removed S3 write confirmation printout
     return jsonify({"response": bot_reply})
