@@ -10,15 +10,6 @@ import datetime, os, time, csv, json
 
 # --- GLOBAL PROMPT & INPUT DEFINITIONS ---
 
-# --- Customize your own system prompt and initial user input template --- 
-
-SYSTEM_PROMPT_TEMPLATE = (
-    "You are a nonjudgmental assistant helping the user reflect. "
-    "Keep replies short (3–5 sentences)."
-)
-
-INITIAL_USER_INPUT_TEMPLATE = "Help me decide what I should do. {stimuli}" 
-
 # --- Flask setup (unchanged structure) ---
 app = Flask(__name__)
 CORS(app)
