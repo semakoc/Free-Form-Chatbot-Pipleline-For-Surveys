@@ -10,6 +10,15 @@ import datetime, os, time, csv, json
 
 # --- GLOBAL PROMPT & INPUT DEFINITIONS ---
 
+# --- Customize your own system prompt and initial user input template --- 
+
+SYSTEM_PROMPT_TEMPLATE = (
+    "You are a nonjudgmental assistant helping the user reflect. "
+    "Keep replies short (3–5 sentences)."
+)
+
+INITIAL_USER_INPUT_TEMPLATE = "Help me decide what I should do. {stimuli}" 
+
 # --- Flask setup (unchanged structure) ---
 app = Flask(__name__)
 CORS(app)
@@ -57,22 +66,26 @@ def chat():
 
     # --- Session initialization ---
     # Replit keeps everything in memory during runtime
-    if (session_key not in all_sessions
-            or now - all_sessions[session_key]["last_active"]
-            > SESSION_TIMEOUT_SECONDS):
-
-        messages = [{
-            "role": "system", 
-            "content": SYSTEM_PROMPT_TEMPLATE
-        }]
+    if (
+        session_key not in all_sessions
+        or now - all_sessions[session_key]["last_active"]
+        > SESSION_TIMEOUT_SECONDS
+    ):
+        system_prompt = SYSTEM_PROMPT_TEMPLATE
+        messages = [{"role": "system", "content": system_prompt}]
         all_sessions[session_key] = {
-            "messages": messages, 
-            "last_active": now, 
-            "system_prompt": SYSTEM_PROMPT_TEMPLATE
+            "messages": messages,
+            "last_active": now,
+            "system_prompt": system_prompt,
         }
 
     messages = all_sessions[session_key]["messages"]
-    system_prompt = all_sessions[session_key].get("system_prompt", messages[0]["content"] if messages and messages[0].get("role") == "system" else "")
+    system_prompt = all_sessions[session_key].get(
+        "system_prompt",
+        messages[0]["content"]
+        if messages and messages[0].get("role") == "system"
+        else "",
+    )
 
     # CHANGED: simple reset command for starting conversation
     if user_input.upper() == "START_CONVERSATION":
@@ -84,8 +97,10 @@ def chat():
     bot_reply = "[Error: no response]"
 
     try:
-        resp = client.chat.completions.create(model=MODEL_NAME,
-                                              messages=messages)
+        resp = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=messages,
+        )
         bot_reply = resp.choices[0].message.content.strip()
         messages.append({"role": "assistant", "content": bot_reply})
     except Exception as e:
