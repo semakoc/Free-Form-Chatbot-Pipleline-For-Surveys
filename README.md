@@ -11,7 +11,7 @@ This repository contains a lightweight, fully self‑contained web chatbot pipel
 ### Additional Information
 <a href="https://github.com/semakoc/Free-Form-Chatbot-Pipleline-For-Surveys/wiki/Project-Structure" target="_blank">Project Structure</a> \
 <a href="https://github.com/semakoc/Free-Form-Chatbot-Pipleline-For-Surveys/wiki/Logs-&-Troubleshooting" target="_blank">Logs & Troubleshooting</a> \
-<a href="https://github.com/semakoc/Free-Form-Chatbot-Pipleline-For-Surveys/wiki/5.-Logs-&-Troubleshooting" target="_blank">AWS Deployment</a>
+<span style="color:blue;"><u>AWS Deployment (page under constrcution, will be updated)</u></span>
 
 ---
 
@@ -45,7 +45,7 @@ This project was developed as part of work associated with the Morality Lab and 
 
 **Presentation APA Citation**:
 
-* Zheng, H. H., Haman, S., & Koc, S. (2026, February 27). Building Free-Form Data Pipelines for Human-AI Conversations in Surveys. SPSP 2026 Annual Convention.
+* Zheng, H., Haman, S., & Koc, S. (2026, February 27). Building Free-Form Data Pipelines for Human-AI Conversations in Surveys. SPSP 2026 Annual Convention.
 
 ---
 ## License
